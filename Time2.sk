@@ -1,0 +1,57 @@
+struct Time {
+  bit[32] data;
+}
+
+Time newTime(int hour, int minute, int second){
+  bit[32] _hour = toBits(hour) << ??;
+  bit[32] _minute = toBits(minute) << ??;
+  bit[32] _second = toBits(second) << ??;
+  return new Time(data=(_hour | _minute | _second));
+}
+
+bit[32] getHour(Time t){
+  return (t.data >> ??) & ??;
+}
+
+bit[32] getMinute(Time t){
+  return (t.data >> ??) & ??;
+}
+
+bit[32] getSecond(Time t){
+  return (t.data >> ??) & ??;
+}
+
+bit[32] toBits(int x){
+  bit[32] bits;
+  for(int i = 0; i < 32; i++){
+    bit b = (bit)(x % 2);
+    bits[i] = b;
+    x = x/2;
+  }
+  return bits;
+}
+
+void assertTime(int hour, int minute, int second){
+  Time t = newTime(hour, minute, second);
+  bit[32] t_hour = getHour(t);
+  assert t_hour == toBits(hour);
+  bit[32] t_minute = getMinute(t);
+  assert t_minute == toBits(minute);
+  bit[32] t_second = getSecond(t);
+  assert t_second == toBits(second);
+}
+
+harness void main(int x){
+
+  assert toBits(0)  == {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  assert toBits(1)  == {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  assert toBits(2)  == {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  assert toBits(4)  == {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  assert toBits(8)  == {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  assert toBits(19) == {1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+  assertTime(15, 31, 0);
+  assertTime(15, 31, 59);
+  assertTime(15, 59, 31);
+
+}
