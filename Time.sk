@@ -1,0 +1,75 @@
+struct Time {
+  int hour;
+  int minute;
+  int second;
+}
+
+
+harness void main(int x){
+
+  Time t = new Time(hour=0, minute=0, second=0);
+  Time _t = tick(t);
+  assert _t.hour == 0;
+  assert _t.minute == 0;
+  assert _t.second == 1;
+
+  Time t2 = new Time(hour=0, minute=0, second=58);
+  Time _t2 = tick(t2);
+  assert _t2.hour == 0;
+  assert _t2.minute == 0;
+  assert _t2.second == 59;
+
+  Time t3 = new Time(hour=0, minute=0, second=59);
+  Time _t3 = tick(t3);
+  assert _t3.hour == 0;
+  assert _t3.minute == 1;
+  assert _t3.second == 0;
+
+  Time t4 = new Time(hour=2, minute=39, second=58);
+  Time _t4 = tick(t4);
+  assert _t4.hour == 2;
+  assert _t4.minute == 39;
+  assert _t4.second == 59;
+
+  Time t5 = new Time(hour=23, minute=59, second=59);
+  Time _t5 = tick(t5);
+  assert _t5.hour == 0;
+  assert _t5.minute == 0;
+  assert _t5.second == 0;
+
+  Time t6 = new Time(hour=18, minute=59, second=59);
+  Time _t6 = tick(t6);
+  assert _t6.hour == 19;
+  assert _t6.minute == 0;
+  assert _t6.second == 0;
+
+
+}
+
+bit isValidTime(Time t) {
+  return t.hour < 24 &&
+    t.hour >= 0 &&
+    t.minute < 60 &&
+    t.minute >= 0 &&
+    t.second < 60 &&
+    t.second >= 0;
+}
+
+Time tick(Time t) {
+  int bump = ??;
+  int secMod = 60;
+  int second_tick = t.second + bump;
+  int newSecond = second_tick % secMod;
+  int minuteInc = second_tick / secMod;
+
+  int minMod = 60;
+  int _minute = t.minute + minuteInc;
+  int newMinute = _minute % minMod;
+  int hourInc = _minute/minMod;
+
+  int hourMod = ??;
+  int newHour = (t.hour + hourInc) % hourMod;
+
+  Time newTime = new Time(hour=newHour, minute=newMinute, second=newSecond);
+  return newTime;
+}
