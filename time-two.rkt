@@ -1,16 +1,8 @@
 #lang racket
 
-; time
-;   integer? integer? integer? -> time?
-(define (time hour minute second)
-  (cons (cons hour minute) second))
 
-(define (time? to-check)
-  (and (pair? to-check)
-       (pair? (car to-check))
-       (integer? (caar to-check))
-       (integer? (cdar to-check))
-       (integer? (cdr to-check))))
+(provide (struct-out time))
+(struct time (seconds) #:transparent)
 
 ; in-range? 
 ;   number? number? number? -> bool?
@@ -20,29 +12,14 @@
 
 ; is-valid-time
 ;   time? -> bool?
+(provide is-valid-time?)
 (define (is-valid-time? time)
-  (let ((hour (caar time))
-        (minute (cdar time))
-        (second (cdr time)))
-    (and (in-range? 0 24 hour)
-         (in-range? 0 60 minute)
-         (in-range? 0 60 second))))
-
-; to-valid-time
-;   integer? -> integer? -> integer? -> time
-(define (to-valid-time hour minute second)
-  (let* ((second-prime (remainder second 60))
-         (minute-prime (+ minute (quotient second 60)))
-         (minute-pprime (remainder minute-prime 60))
-         (hour-prime (+ hour (quotient minute-prime 60)))
-         (hour-pprime (remainder hour-prime 24)))
-    (time hour-pprime minute-pprime second-prime)))
+    (in-range? 0 86400 (time-seconds time)))
 
 ; tick
 ;   time? -> time?
-(define (tick time)
-  (let ((hour (caar time))
-        (minute (cdar time))
-        (second (+ (cdr time) 1)))
-    (to-valid-time hour minute second)))
+(provide tick)
+(define (tick t)
+  (let ((seconds (time-seconds t)))
+    (time (modulo (+ seconds 1) 86400))))
               
