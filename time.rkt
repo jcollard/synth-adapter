@@ -2,15 +2,8 @@
 
 ; time
 ;   integer? integer? integer? -> time?
-(define (time hour minute second)
-  (cons hour (cons minute second)))
-
-(define (time? to-check)
-  (and (pair? to-check)
-       (integer? (car to-check))
-       (pair? (cdr to-check))
-       (integer? (cadr to-check))
-       (integer? (cddr to-check))))
+(provide (struct-out time))
+(struct time (hour minute second) #:transparent)
 
 ; in-range? 
 ;   number? number? number? -> bool?
@@ -20,10 +13,11 @@
 
 ; is-valid-time
 ;   time? -> bool?
+(provide is-valid-time?)
 (define (is-valid-time? time)
-  (let ((hour (car time))
-        (minute (cadr time))
-        (second (cddr time)))
+  (let ((hour (time-hour time))
+        (minute (time-minute time))
+        (second (time-second time)))
     (and (in-range? 0 24 hour)
          (in-range? 0 60 minute)
          (in-range? 0 60 second))))
@@ -40,9 +34,10 @@
 
 ; tick
 ;   time? -> time?
+(provide tick)
 (define (tick time)
-  (let ((hour (car time))
-        (minute (cadr time))
-        (second (+ (cddr time) 1)))
+  (let ((hour (time-hour time))
+        (minute (time-minute time))
+        (second (+ (time-second time) 1)))
     (to-valid-time hour minute second)))
               
